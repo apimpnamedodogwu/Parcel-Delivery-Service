@@ -20,7 +20,7 @@ public class Parcel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @Embedded
     private Location deliveryLocation;
     private LocalDateTime deliveryDate;
     private LocalDateTime creationDate;

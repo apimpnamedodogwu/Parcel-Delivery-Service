@@ -6,8 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Data
-@Entity
-@Table(name = "location")
+@Embeddable
 public class Location implements Serializable {
 
     private String state;
@@ -15,8 +14,5 @@ public class Location implements Serializable {
     private String street;
     private String country;
     private String city;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
 }
