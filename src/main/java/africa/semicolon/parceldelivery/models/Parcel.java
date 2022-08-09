@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.time.LocalDateTime;
 
 @Data
@@ -20,5 +22,7 @@ public class Parcel {
 
     private String itemName;
     private String itemDescription;
+
+    @Enumerated(EnumType.STRING)
     private ParcelDeliveryStatus deliveryStatus;
 }
