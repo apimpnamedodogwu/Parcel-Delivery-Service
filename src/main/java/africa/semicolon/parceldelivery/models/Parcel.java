@@ -5,24 +5,29 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name = "parcel")
 public class Parcel {
+    @javax.persistence.Id
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    @OneToOne
     private Location deliveryLocation;
     private LocalDateTime deliveryDate;
     private LocalDateTime creationDate;
 
     private String itemName;
     private String itemDescription;
-
-    @Enumerated(EnumType.STRING)
     private ParcelDeliveryStatus deliveryStatus;
+
 }
+

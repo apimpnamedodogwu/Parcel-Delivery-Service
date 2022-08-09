@@ -23,7 +23,7 @@ public enum Role {
     }
 
     @JsonValue
-    public String getStatus() {
+    public String getType() {
         return type;
     }
 }
