@@ -17,7 +17,13 @@ import java.time.LocalDateTime;
 public class Parcel {
     @javax.persistence.Id
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(
+            name = "parcel_sequence",
+            sequenceName = "parcel_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "parcel_sequence")
     private Long id;
 
     @Embedded
