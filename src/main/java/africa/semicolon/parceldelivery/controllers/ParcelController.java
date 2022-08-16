@@ -29,6 +29,5 @@ public class ParcelController {
         } catch (ParcelIdException message) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Parcel id number " + parcel_id + " does not exist!", message);
         }
-
     }
 }
