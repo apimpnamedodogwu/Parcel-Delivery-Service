@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ParcelService {
 
-    void updateParcelStatus(long parcelId, String newStatus);
+    void updateParcelStatus(Long parcelId, String newStatus);
 
     List<Parcel> getAllParcels(int pageNumber);
 

@@ -18,16 +18,15 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ParcelServiceImplementationTest {
-
-    @InjectMocks
-    ParcelServiceImplementation parcelServiceImplementation;
-
     @Mock
     ParcelRepository parcelRepository;
+    @InjectMocks
+    ParcelServiceImplementation parcelServiceImplementation;
 
     @Test
     void testThatParcelStatusCanBeUpdated() {
         Parcel parcel = new Parcel();
+        parcel.setId(1L);
         String status = "PENDING";
         when(parcelRepository.findById(parcel.getId())).thenReturn(Optional.of(parcel));
         parcelServiceImplementation.updateParcelStatus(parcel.getId(), status);

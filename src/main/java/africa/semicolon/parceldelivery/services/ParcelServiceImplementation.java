@@ -22,7 +22,7 @@ public class ParcelServiceImplementation implements ParcelService {
     }
 
     @Override
-    public void updateParcelStatus(long parcelId, String newStatus) {
+    public void updateParcelStatus(Long parcelId, String newStatus) {
         var parcel = parcelRepository.findById(parcelId);
         if (parcel.isPresent()) {
             var status = ParcelDeliveryStatus.decode(newStatus);
@@ -30,7 +30,7 @@ public class ParcelServiceImplementation implements ParcelService {
             parcelRepository.save(parcel.get());
             return;
         }
-        throw new ParcelIdException("Parcel id number " + parcelId + " does not exist!");
+        throw new ParcelIdException(parcelId);
     }
 
     @Override
