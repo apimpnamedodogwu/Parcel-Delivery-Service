@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 
 @Data
@@ -31,7 +32,9 @@ public class Parcel {
     private LocalDateTime deliveryDate;
     private LocalDateTime creationDate;
 
+    @NotEmpty(message = "name cannot be empty!")
     private String itemName;
+
     private String itemDescription;
     private ParcelDeliveryStatus deliveryStatus;
 

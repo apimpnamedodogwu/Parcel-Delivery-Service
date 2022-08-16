@@ -2,8 +2,10 @@ package africa.semicolon.parceldelivery.services;
 
 import africa.semicolon.parceldelivery.models.Location;
 import africa.semicolon.parceldelivery.models.Parcel;
+import africa.semicolon.parceldelivery.models.ParcelDeliveryStatus;
 import africa.semicolon.parceldelivery.repositories.ParcelRepository;
 import africa.semicolon.parceldelivery.requests.ParcelCreationRequest;
+import africa.semicolon.parceldelivery.services.parcelExceptions.ParcelIdException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +22,15 @@ public class ParcelServiceImplementation implements ParcelService {
     }
 
     @Override
-    public void updateParcelStatus(int parcelId, String newStatus) {
-
+    public void updateParcelStatus(long parcelId, String newStatus) {
+        var parcel = parcelRepository.findById(parcelId);
+        if (parcel.isPresent()) {
+            var status = ParcelDeliveryStatus.decode(newStatus);
+            parcel.get().setDeliveryStatus(status);
+            parcelRepository.save(parcel.get());
+            return;
+        }
+        throw new ParcelIdException("Parcel id number " + parcelId + " does not exist!");
     }
 
     @Override
