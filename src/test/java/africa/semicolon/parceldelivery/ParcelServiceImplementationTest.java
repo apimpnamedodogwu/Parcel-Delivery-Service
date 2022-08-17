@@ -9,8 +9,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -35,5 +40,11 @@ public class ParcelServiceImplementationTest {
         var newStatus = parcelArgumentCaptor.getValue();
         assertThat(newStatus.getDeliveryStatus()).isEqualTo(ParcelDeliveryStatus.CODE_1);
         verify(parcelRepository, times(1)).save(parcel);
+    }
+
+    @Test
+    void testThatAllParcelsCanBeGotten() {
+      parcelServiceImplementation.getAllParcels(1);
+      verify(parcelRepository).findAllBy(Pageable.ofSize(20));
     }
 }

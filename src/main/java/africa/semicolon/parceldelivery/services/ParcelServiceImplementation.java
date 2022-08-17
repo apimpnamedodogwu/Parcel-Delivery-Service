@@ -7,7 +7,10 @@ import africa.semicolon.parceldelivery.repositories.ParcelRepository;
 import africa.semicolon.parceldelivery.requests.ParcelCreationRequest;
 import africa.semicolon.parceldelivery.services.parcelExceptions.ParcelIdException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 
@@ -35,7 +38,8 @@ public class ParcelServiceImplementation implements ParcelService {
 
     @Override
     public List<Parcel> getAllParcels(int pageNumber) {
-        return null;
+        Pageable pageable = PageRequest.of(pageNumber - 1, 20);
+        return parcelRepository.findAllBy(pageable);
     }
 
     @Override
