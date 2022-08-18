@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,5 +47,17 @@ public class ParcelServiceImplementationTest {
     void testThatAllParcelsCanBeGotten() {
       parcelServiceImplementation.getAllParcels(1);
       verify(parcelRepository).findAllBy(Pageable.ofSize(20));
+    }
+
+    @Test
+    void testThatAllDeliveredParcelsCanBeGotten() {
+        parcelServiceImplementation.getAllParcels(1);
+        verify(parcelRepository).findParcelsByDeliveryStatus(ParcelDeliveryStatus.CODE_3, Pageable.ofSize(20).getSort());
+
+//        parcelServiceImplementation.getAllDeliveredParcels(1);
+//        ArgumentCaptor<Pageable> pageableArgumentCaptor = ArgumentCaptor.forClass(Pageable.class);
+//        verify(parcelRepository).findAllBy(pageableArgumentCaptor.capture());
+//        var pageable = pageableArgumentCaptor.getValue();
+//        assertThat(pageable).hasSort()
     }
 }

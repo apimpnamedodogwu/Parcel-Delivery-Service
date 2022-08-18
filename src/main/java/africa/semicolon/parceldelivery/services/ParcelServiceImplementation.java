@@ -9,6 +9,7 @@ import africa.semicolon.parceldelivery.services.parcelExceptions.ParcelIdExcepti
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -18,6 +19,7 @@ import java.util.List;
 public class ParcelServiceImplementation implements ParcelService {
 
     private final ParcelRepository parcelRepository;
+
 
     @Autowired
     public ParcelServiceImplementation(ParcelRepository parcelRepository) {
@@ -44,7 +46,8 @@ public class ParcelServiceImplementation implements ParcelService {
 
     @Override
     public List<Parcel> getAllDeliveredParcels(int pageNumber) {
-        return null;
+        Pageable pageable = PageRequest.of(pageNumber - 1, 20, Sort.by("DELIVERED"));
+        return parcelRepository.findParcelsByDeliveryStatus(ParcelDeliveryStatus.CODE_3, pageable.getSort());
     }
 
     @Override

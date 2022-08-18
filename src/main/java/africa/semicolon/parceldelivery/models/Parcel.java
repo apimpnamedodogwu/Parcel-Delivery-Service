@@ -36,6 +36,8 @@ public class Parcel {
     private String itemName;
 
     private String itemDescription;
+
+    @Enumerated(EnumType.ORDINAL)
     private ParcelDeliveryStatus deliveryStatus;
 
 }
