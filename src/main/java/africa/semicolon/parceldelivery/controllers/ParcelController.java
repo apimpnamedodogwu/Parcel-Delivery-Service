@@ -28,4 +28,10 @@ public class ParcelController {
         var displayMessage = "Successful!";
         return new ResponseEntity<>(displayMessage, HttpStatus.OK);
     }
+
+    @GetMapping("/get-all-parcels/page-number")
+    public ResponseEntity<?> getAllParcels(@RequestParam int pageNumber) {
+        var list = parcelService.getAllParcels(pageNumber);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
 }
