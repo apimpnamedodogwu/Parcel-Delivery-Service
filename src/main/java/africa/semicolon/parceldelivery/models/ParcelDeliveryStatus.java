@@ -20,7 +20,7 @@ public enum ParcelDeliveryStatus {
 
     @JsonCreator
     public static ParcelDeliveryStatus decode(final String status) {
-        return Stream.of(ParcelDeliveryStatus.values()).filter(targetEnum -> targetEnum.status.equals(status)).findFirst().orElseThrow(() -> new ParcelDeliveryStatusException("Invalid status!"));
+        return Stream.of(ParcelDeliveryStatus.values()).filter(targetEnum -> targetEnum.status.equals(status)).findFirst().orElseThrow(() -> new ParcelDeliveryStatusException(status));
     }
 
     @JsonValue
