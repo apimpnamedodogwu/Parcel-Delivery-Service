@@ -46,23 +46,26 @@ public class ParcelServiceImplementation implements ParcelService {
 
     @Override
     public List<Parcel> getAllDeliveredParcels(int pageNumber) {
-        Pageable pageable = PageRequest.of(pageNumber - 1, 20, Sort.by("DELIVERED"));
-        return parcelRepository.findParcelsByDeliveryStatus(ParcelDeliveryStatus.CODE_3, pageable.getSort());
+        Pageable pageable = PageRequest.of(pageNumber - 1, 20);
+        return parcelRepository.findParcelsByDeliveryStatus(ParcelDeliveryStatus.CODE_3, pageable);
     }
 
     @Override
     public List<Parcel> getAllParcelsInTransit(int pageNumber) {
-        return null;
+        Pageable pageable = PageRequest.of(pageNumber - 1, 20);
+        return parcelRepository.findParcelsByDeliveryStatus(ParcelDeliveryStatus.CODE_2, pageable);
     }
 
     @Override
     public List<Parcel> getAllPendingParcels(int pageNumber) {
-        return null;
+        Pageable pageable = PageRequest.of(pageNumber - 1, 20);
+        return parcelRepository.findParcelsByDeliveryStatus(ParcelDeliveryStatus.CODE_1, pageable);
     }
 
     @Override
     public List<Parcel> getAllFailedParcels(int pageNumber) {
-        return null;
+        Pageable pageable = PageRequest.of(pageNumber - 1, 20);
+        return parcelRepository.findParcelsByDeliveryStatus(ParcelDeliveryStatus.CODE_0, pageable);
     }
 
     @Override

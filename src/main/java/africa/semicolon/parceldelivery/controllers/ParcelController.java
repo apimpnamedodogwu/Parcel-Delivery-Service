@@ -34,4 +34,28 @@ public class ParcelController {
         var list = parcelService.getAllParcels(pageNumber);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
+
+    @GetMapping("/get-all-delivered-parcels/page-number")
+    public ResponseEntity<?> getAllDeliveredParcels(@RequestParam int pageNumber) {
+        var list = parcelService.getAllDeliveredParcels(pageNumber);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-all-parcels-in-transit/page-number")
+    public ResponseEntity<?> getAllParcelsInTransit(@RequestParam int pageNumber) {
+        var list = parcelService.getAllParcelsInTransit(pageNumber);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-all-pending-parcels/page-number")
+    public ResponseEntity<?> getAllPendingParcels(@RequestParam int pageNumber) {
+        var list = parcelService.getAllPendingParcels(pageNumber);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-all-failed-to-deliver-parcels/page-number")
+    public ResponseEntity<?> getAllFailedParcels(@RequestParam int pageNumber) {
+        var list = parcelService.getAllFailedParcels(pageNumber);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
 }

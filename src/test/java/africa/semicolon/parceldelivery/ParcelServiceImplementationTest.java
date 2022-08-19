@@ -9,14 +9,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import org.springframework.data.domain.Pageable;
+
+
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -28,6 +26,8 @@ public class ParcelServiceImplementationTest {
     ParcelRepository parcelRepository;
     @InjectMocks
     ParcelServiceImplementation parcelServiceImplementation;
+
+
 
     @Test
     void testThatParcelStatusCanBeUpdated() {
@@ -45,19 +45,31 @@ public class ParcelServiceImplementationTest {
 
     @Test
     void testThatAllParcelsCanBeGotten() {
-      parcelServiceImplementation.getAllParcels(1);
-      verify(parcelRepository).findAllBy(Pageable.ofSize(20));
+        parcelServiceImplementation.getAllParcels(1);
+        verify(parcelRepository).findAllBy(Pageable.ofSize(20));
     }
 
     @Test
     void testThatAllDeliveredParcelsCanBeGotten() {
-        parcelServiceImplementation.getAllParcels(1);
-        verify(parcelRepository).findParcelsByDeliveryStatus(ParcelDeliveryStatus.CODE_3, Pageable.ofSize(20).getSort());
+        parcelServiceImplementation.getAllDeliveredParcels(1);
+        verify(parcelRepository).findParcelsByDeliveryStatus(ParcelDeliveryStatus.CODE_3, Pageable.ofSize(20));
+    }
 
-//        parcelServiceImplementation.getAllDeliveredParcels(1);
-//        ArgumentCaptor<Pageable> pageableArgumentCaptor = ArgumentCaptor.forClass(Pageable.class);
-//        verify(parcelRepository).findAllBy(pageableArgumentCaptor.capture());
-//        var pageable = pageableArgumentCaptor.getValue();
-//        assertThat(pageable).hasSort()
+    @Test
+    void testThatAllParcelsInTransitCanBeGotten() {
+        parcelServiceImplementation.getAllParcelsInTransit(1);
+        verify(parcelRepository).findParcelsByDeliveryStatus(ParcelDeliveryStatus.CODE_2, Pageable.ofSize(20));
+    }
+
+    @Test
+    void testThatAllPendingParcelsCanBeGotten() {
+        parcelServiceImplementation.getAllPendingParcels(1);
+        verify(parcelRepository).findParcelsByDeliveryStatus(ParcelDeliveryStatus.CODE_1, Pageable.ofSize(20));
+    }
+
+    @Test
+    void testThatAllFailedParcelsCanBeGotten() {
+        parcelServiceImplementation.getAllFailedParcels(1);
+        verify(parcelRepository).findParcelsByDeliveryStatus(ParcelDeliveryStatus.CODE_0, Pageable.ofSize(20));
     }
 }
