@@ -18,4 +18,5 @@ public interface ParcelRepository extends JpaRepository<Parcel, Long> {
    List<Parcel> findAllBy(Pageable pageable);
    List<Parcel> findParcelsByDeliveryStatus(ParcelDeliveryStatus status, Pageable pageable);
 
+
 }

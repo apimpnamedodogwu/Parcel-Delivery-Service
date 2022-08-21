@@ -22,8 +22,8 @@ public interface ParcelService {
 
     void createParcel(ParcelCreationRequest request);
 
-    Parcel getParcelDetails(String id);
+    Parcel getParcelDetails(Long id);
 
-    void updateParcelLocation(Location newLocation);
+    void updateParcelLocation(Long id, Location newLocation);
 
 }

@@ -58,4 +58,6 @@ public class ParcelController {
         var list = parcelService.getAllFailedParcels(pageNumber);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
+
+
 }
