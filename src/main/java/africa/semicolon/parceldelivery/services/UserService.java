@@ -1,5 +1,6 @@
 package africa.semicolon.parceldelivery.services;
 
+import africa.semicolon.parceldelivery.models.Parcel;
 import africa.semicolon.parceldelivery.models.User;
 import africa.semicolon.parceldelivery.requests.UserRegistrationRequest;
 
@@ -15,5 +16,5 @@ public interface UserService {
 
     List<User> getAllUsers(int pageNumber);
 
-    List<User> getAllUserParcels(String userId);
+    List<Parcel> getAllUserParcels(Long userId);
 }

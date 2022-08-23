@@ -2,8 +2,10 @@ package africa.semicolon.parceldelivery.services;
 
 import africa.semicolon.parceldelivery.models.User;
 import africa.semicolon.parceldelivery.repositories.UserRepository;
+import africa.semicolon.parceldelivery.requests.UserRegistrationRequest;
 import africa.semicolon.parceldelivery.services.userExceptions.InvalidUserIdException;
 import africa.semicolon.parceldelivery.services.userExceptions.NonExistingEmailException;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -17,8 +19,8 @@ import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplementationTest {
@@ -28,6 +30,7 @@ class UserServiceImplementationTest {
 
     @InjectMocks
     UserServiceImplementation userServiceImplementation;
+
 
     @Test
     void testThatUserCanBeGottenByEmail() {
@@ -74,7 +77,21 @@ class UserServiceImplementationTest {
     }
 
     @Test
-    void createUser() {
+    void testThatUserCanBeCreated() {
+        UserRegistrationRequest request = new UserRegistrationRequest();
+//        User user = new User();
+        request.setEmail("eden.kwinesta@gmail.com");
+        request.setFirstName("Eden");
+        request.setLastName("Elenwoke");
+        request.setUserName("edentheheathen");
+        request.setPassword("Eden_247365");
+//        when(userRepository.findUserByEmail(request.getEmail())).thenReturn(Optional.empty());
+        userServiceImplementation.createUser(request);
+        ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
+        verify(userRepository).save(userArgumentCaptor.capture());
+        var capturedUser = userArgumentCaptor.getValue();
+        assertThat(capturedUser.getEmail()).isEqualTo(request.getEmail());
+        verify(userRepository, times(1)).save(capturedUser);
     }
 
     @Test

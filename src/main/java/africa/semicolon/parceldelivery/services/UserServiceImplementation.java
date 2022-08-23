@@ -1,5 +1,6 @@
 package africa.semicolon.parceldelivery.services;
 
+import africa.semicolon.parceldelivery.models.Parcel;
 import africa.semicolon.parceldelivery.models.Role;
 import africa.semicolon.parceldelivery.models.User;
 import africa.semicolon.parceldelivery.repositories.UserRepository;
@@ -9,6 +10,8 @@ import africa.semicolon.parceldelivery.services.userExceptions.InvalidUserIdExce
 import africa.semicolon.parceldelivery.services.userExceptions.NonExistingEmailException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -59,11 +62,16 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public List<User> getAllUsers(int pageNumber) {
-        return null;
+        Pageable pageable = PageRequest.of(pageNumber - 1, 20);
+        return userRepository.findAllBy(pageable);
     }
 
     @Override
-    public List<User> getAllUserParcels(String userId) {
-        return null;
+    public List<Parcel> getAllUserParcels(Long userId) {
+        var existingUser = userRepository.findUserById(userId);
+        if (existingUser.isPresent()) {
+            return existingUser.get().getParcels();
+        }
+        throw new InvalidUserIdException(userId);
     }
 }
