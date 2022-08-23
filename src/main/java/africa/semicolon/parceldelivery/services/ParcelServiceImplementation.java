@@ -3,13 +3,13 @@ package africa.semicolon.parceldelivery.services;
 import africa.semicolon.parceldelivery.models.Location;
 import africa.semicolon.parceldelivery.models.Parcel;
 import africa.semicolon.parceldelivery.models.ParcelDeliveryStatus;
-import africa.semicolon.parceldelivery.models.User;
 import africa.semicolon.parceldelivery.repositories.ParcelRepository;
 import africa.semicolon.parceldelivery.repositories.UserRepository;
 import africa.semicolon.parceldelivery.requests.ParcelCreationRequest;
 import africa.semicolon.parceldelivery.services.parcelExceptions.EmptyFieldException;
 import africa.semicolon.parceldelivery.services.parcelExceptions.ParcelIdException;
 import africa.semicolon.parceldelivery.services.userExceptions.NonExistingEmailException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -76,15 +76,14 @@ public class ParcelServiceImplementation implements ParcelService {
     @Override
     public void createParcel(ParcelCreationRequest request) {
         Parcel parcel = new Parcel();
+        ModelMapper modelMapper = new ModelMapper();
         request.validateParcelCreation(request);
         var userCreatingAParcelExists = userRepository.findUserByEmail(request.getCreatorEmail());
         if (userCreatingAParcelExists.isPresent()) {
-            parcel.setItemName(request.getItemName());
-            parcel.setItemDescription(request.getItemDescription());
+            modelMapper.map(parcel, request);
             parcel.setCreationDate(LocalDateTime.now());
             parcel.setDeliveryStatus(ParcelDeliveryStatus.CODE_1);
             parcel.setDeliveryDate(LocalDateTime.now());
-            parcel.setDeliveryLocation(request.getDeliveryLocation());
             parcelRepository.save(parcel);
             userCreatingAParcelExists.get().getParcels().add(parcel);
             userRepository.save(userCreatingAParcelExists.get());

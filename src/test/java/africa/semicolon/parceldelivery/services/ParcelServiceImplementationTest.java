@@ -1,4 +1,4 @@
-package africa.semicolon.parceldelivery;
+package africa.semicolon.parceldelivery.services;
 
 import africa.semicolon.parceldelivery.models.Location;
 import africa.semicolon.parceldelivery.models.Parcel;
@@ -7,7 +7,6 @@ import africa.semicolon.parceldelivery.models.User;
 import africa.semicolon.parceldelivery.repositories.ParcelRepository;
 import africa.semicolon.parceldelivery.repositories.UserRepository;
 import africa.semicolon.parceldelivery.requests.ParcelCreationRequest;
-import africa.semicolon.parceldelivery.services.ParcelServiceImplementation;
 import africa.semicolon.parceldelivery.services.parcelExceptions.EmptyFieldException;
 import africa.semicolon.parceldelivery.services.parcelExceptions.ParcelDeliveryStatusException;
 import africa.semicolon.parceldelivery.services.parcelExceptions.ParcelIdException;
