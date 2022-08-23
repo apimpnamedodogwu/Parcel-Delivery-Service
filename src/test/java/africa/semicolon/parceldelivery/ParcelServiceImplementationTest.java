@@ -44,7 +44,7 @@ public class ParcelServiceImplementationTest {
         Parcel parcel = new Parcel();
         parcel.setId(1L);
         String status = "PENDING";
-        when(parcelRepository.findById(parcel.getId())).thenReturn(Optional.of(parcel));
+        when(parcelRepository.findParcelsById(parcel.getId())).thenReturn(Optional.of(parcel));
         parcelServiceImplementation.updateParcelStatus(parcel.getId(), status);
         ArgumentCaptor<Parcel> parcelArgumentCaptor = ArgumentCaptor.forClass(Parcel.class);
         verify(parcelRepository).save(parcelArgumentCaptor.capture());
@@ -58,7 +58,7 @@ public class ParcelServiceImplementationTest {
         Parcel parcel = new Parcel();
         parcel.setId(1L);
         String status = "Bread cake";
-        when(parcelRepository.findById(parcel.getId())).thenReturn(Optional.of(parcel));
+        when(parcelRepository.findParcelsById(parcel.getId())).thenReturn(Optional.of(parcel));
         assertThatThrownBy(() -> parcelServiceImplementation.updateParcelStatus(parcel.getId(), status))
                 .isInstanceOf(ParcelDeliveryStatusException.class)
                 .hasMessage("This " + status + " is invalid!");
@@ -69,7 +69,7 @@ public class ParcelServiceImplementationTest {
         Parcel parcel = new Parcel();
         String status = "DELIVERED";
         parcel.setId(1L);
-        when(parcelRepository.findById(parcel.getId())).thenReturn(Optional.empty());
+        when(parcelRepository.findParcelsById(parcel.getId())).thenReturn(Optional.empty());
         assertThatThrownBy(() -> parcelServiceImplementation.updateParcelStatus(parcel.getId(), status))
                 .isInstanceOf(ParcelIdException.class)
                 .hasMessage("Parcel with id %d does not exist!", parcel.getId());
@@ -158,10 +158,10 @@ public class ParcelServiceImplementationTest {
         Parcel parcel = new Parcel();
         parcel.setId(1L);
         parcel.setItemName("bread");
-        when(parcelRepository.findById(parcel.getId())).thenReturn(Optional.of(parcel));
+        when(parcelRepository.findParcelsById(parcel.getId())).thenReturn(Optional.of(parcel));
         parcelServiceImplementation.getParcelDetails(parcel.getId());
         ArgumentCaptor<Long> parcelArgumentCaptor = ArgumentCaptor.forClass(Long.class);
-        verify(parcelRepository).findById(parcelArgumentCaptor.capture());
+        verify(parcelRepository).findParcelsById(parcelArgumentCaptor.capture());
         var capturedParcels = parcelArgumentCaptor.getValue();
         assertThat(capturedParcels).isEqualTo(parcel.getId());
     }
@@ -170,7 +170,7 @@ public class ParcelServiceImplementationTest {
     void testThatParcelIdExceptionIsThrownInMethodGetParcelDetails() {
         Parcel parcel = new Parcel();
         parcel.setId(null);
-        when(parcelRepository.findById(parcel.getId())).thenReturn(Optional.empty());
+        when(parcelRepository.findParcelsById(parcel.getId())).thenReturn(Optional.empty());
         assertThatThrownBy(() -> parcelServiceImplementation.getParcelDetails(parcel.getId()))
                 .isInstanceOf(ParcelIdException.class)
                 .hasMessage("Parcel with id %d does not exist!", parcel.getId());
@@ -186,7 +186,7 @@ public class ParcelServiceImplementationTest {
         location.setState("Lagos");
         location.setStreet("Emily Akinola");
         location.setNumber(30);
-        when(parcelRepository.findById(parcel.getId())).thenReturn(Optional.of(parcel));
+        when(parcelRepository.findParcelsById(parcel.getId())).thenReturn(Optional.of(parcel));
         parcelServiceImplementation.updateParcelLocation(parcel.getId(), location);
         ArgumentCaptor<Parcel> argumentCaptor = ArgumentCaptor.forClass(Parcel.class);
         verify(parcelRepository).save(argumentCaptor.capture());
@@ -205,7 +205,7 @@ public class ParcelServiceImplementationTest {
         location.setStreet("");
         location.setCity("");
         location.setCountry("");
-        when(parcelRepository.findById(parcel.getId())).thenReturn(Optional.empty());
+        when(parcelRepository.findParcelsById(parcel.getId())).thenReturn(Optional.empty());
         assertThatThrownBy(() -> parcelServiceImplementation.updateParcelLocation(parcel.getId(), location))
                 .isInstanceOf(EmptyFieldException.class)
                 .hasMessage("Cannot save an empty field!");

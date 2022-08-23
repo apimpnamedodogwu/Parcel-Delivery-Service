@@ -3,6 +3,7 @@ package africa.semicolon.parceldelivery.services;
 import africa.semicolon.parceldelivery.models.Location;
 import africa.semicolon.parceldelivery.models.Parcel;
 import africa.semicolon.parceldelivery.models.ParcelDeliveryStatus;
+import africa.semicolon.parceldelivery.models.User;
 import africa.semicolon.parceldelivery.repositories.ParcelRepository;
 import africa.semicolon.parceldelivery.repositories.UserRepository;
 import africa.semicolon.parceldelivery.requests.ParcelCreationRequest;
@@ -32,7 +33,7 @@ public class ParcelServiceImplementation implements ParcelService {
 
     @Override
     public void updateParcelStatus(Long parcelId, String newStatus) {
-        var parcel = parcelRepository.findById(parcelId);
+        var parcel = parcelRepository.findParcelsById(parcelId);
         if (parcel.isPresent()) {
             var status = ParcelDeliveryStatus.decode(newStatus);
             parcel.get().setDeliveryStatus(status);
@@ -85,6 +86,8 @@ public class ParcelServiceImplementation implements ParcelService {
             parcel.setDeliveryDate(LocalDateTime.now());
             parcel.setDeliveryLocation(request.getDeliveryLocation());
             parcelRepository.save(parcel);
+            userCreatingAParcelExists.get().getParcels().add(parcel);
+            userRepository.save(userCreatingAParcelExists.get());
             return;
         }
         throw new NonExistingEmailException(request.getCreatorEmail());
@@ -92,7 +95,7 @@ public class ParcelServiceImplementation implements ParcelService {
 
     @Override
     public Parcel getParcelDetails(Long id) {
-        var existingParcel = parcelRepository.findById(id);
+        var existingParcel = parcelRepository.findParcelsById(id);
         if (existingParcel.isPresent()) {
             return existingParcel.get();
         }
@@ -104,11 +107,12 @@ public class ParcelServiceImplementation implements ParcelService {
         if (newLocation == null) {
             throw new EmptyFieldException("Cannot save an empty field!");
         }
-        var existingParcel = parcelRepository.findById(id);
-       if (existingParcel.isPresent()) {
-           existingParcel.get().setDeliveryLocation(newLocation);
-           parcelRepository.save(existingParcel.get());
-           return;
-       } throw new EmptyFieldException("Cannot save an empty field!");
+        var existingParcel = parcelRepository.findParcelsById(id);
+        if (existingParcel.isPresent()) {
+            existingParcel.get().setDeliveryLocation(newLocation);
+            parcelRepository.save(existingParcel.get());
+            return;
+        }
+        throw new EmptyFieldException("Cannot save an empty field!");
     }
 }
