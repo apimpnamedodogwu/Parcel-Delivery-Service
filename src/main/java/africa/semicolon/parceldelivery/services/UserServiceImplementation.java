@@ -1,8 +1,13 @@
 package africa.semicolon.parceldelivery.services;
 
+import africa.semicolon.parceldelivery.models.Role;
 import africa.semicolon.parceldelivery.models.User;
 import africa.semicolon.parceldelivery.repositories.UserRepository;
 import africa.semicolon.parceldelivery.requests.UserRegistrationRequest;
+import africa.semicolon.parceldelivery.services.userExceptions.ExistingEmailException;
+import africa.semicolon.parceldelivery.services.userExceptions.InvalidUserIdException;
+import africa.semicolon.parceldelivery.services.userExceptions.NonExistingEmailException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,17 +25,36 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public User getUserByEmail(String email) {
-        return null;
+        var user = userRepository.findUserByEmail(email);
+        if (user.isPresent()) {
+            return user.get();
+        }
+        throw new NonExistingEmailException(email);
     }
 
     @Override
-    public User getUserById(String id) {
-        return null;
+    public User getUserById(Long id) {
+        var user = userRepository.findUserById(id);
+        if (user.isPresent()) {
+            return user.get();
+        }
+        throw new InvalidUserIdException(id);
     }
 
     @Override
     public void createUser(UserRegistrationRequest request) {
-
+        ModelMapper modelMapper = new ModelMapper();
+        User user = new User();
+        var existingUser = userRepository.findUserByEmail(request.getEmail());
+        if (existingUser.isPresent()) {
+            throw new ExistingEmailException(request.getEmail());
+        } else if (UserRegistrationRequest.validateRequestEmail(request.getEmail())
+                && UserRegistrationRequest.validateRequestPassword(request.getPassword())
+                && UserRegistrationRequest.validateNameFields(request.getFirstName(), request.getLastName(), request.getUserName())) {
+            modelMapper.map(user, request);
+            user.setRole(Role.TYPE_1);
+            userRepository.save(user);
+        }
     }
 
     @Override

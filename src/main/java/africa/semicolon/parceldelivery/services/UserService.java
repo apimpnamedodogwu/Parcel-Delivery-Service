@@ -9,7 +9,7 @@ public interface UserService {
 
     User getUserByEmail(String email);
 
-    User getUserById(String id);
+    User getUserById(Long id);
 
     void createUser(UserRegistrationRequest request);
 
