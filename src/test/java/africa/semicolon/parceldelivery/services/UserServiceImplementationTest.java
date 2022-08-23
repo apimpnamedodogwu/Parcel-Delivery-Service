@@ -3,25 +3,21 @@ package africa.semicolon.parceldelivery.services;
 import africa.semicolon.parceldelivery.models.User;
 import africa.semicolon.parceldelivery.repositories.UserRepository;
 import africa.semicolon.parceldelivery.requests.UserRegistrationRequest;
+import africa.semicolon.parceldelivery.services.userExceptions.ExistingEmailException;
 import africa.semicolon.parceldelivery.services.userExceptions.InvalidUserIdException;
 import africa.semicolon.parceldelivery.services.userExceptions.NonExistingEmailException;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -77,17 +73,15 @@ class UserServiceImplementationTest {
                 .isInstanceOf(InvalidUserIdException.class)
                 .hasMessage("User with id number " + user.getId() + " does not exist!");
     }
-    @Disabled
+
     @Test
     void testThatUserCanBeCreated() {
         UserRegistrationRequest request = new UserRegistrationRequest();
-//        User user = new User();
         request.setEmail("eden.kwinesta@gmail.com");
         request.setFirstName("Eden");
         request.setLastName("Elenwoke");
         request.setUserName("edentheheathen");
-        request.setPassword("Eden_247365");
-//        when(userRepository.findUserByEmail(request.getEmail())).thenReturn(Optional.empty());
+        request.setPassword("12345678");
         userServiceImplementation.createUser(request);
         ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
         verify(userRepository).save(userArgumentCaptor.capture());
@@ -95,6 +89,23 @@ class UserServiceImplementationTest {
         assertThat(capturedUser.getEmail()).isEqualTo(request.getEmail());
         verify(userRepository, times(1)).save(capturedUser);
     }
+
+    @Test
+    void testThatExistingEmailExceptionIsThrownInMethodCreateUser() {
+        UserRegistrationRequest request = new UserRegistrationRequest();
+        User user = new User();
+        request.setEmail("eden.kwinesta@gmail.com");
+        request.setFirstName("Eden");
+        request.setLastName("Elenwoke");
+        request.setUserName("edentheheathen");
+        request.setPassword("12345678");
+        userServiceImplementation.createUser(request);
+        when(userRepository.findUserByEmail(request.getEmail())).thenReturn(Optional.of(user));
+        assertThatThrownBy(() -> userServiceImplementation.createUser(request))
+                .isInstanceOf(ExistingEmailException.class)
+                .hasMessage("User with email address " + request.getEmail() + " already exists!");
+    }
+
 
     @Test
     void testThatAllUsersCanBeGotten() {

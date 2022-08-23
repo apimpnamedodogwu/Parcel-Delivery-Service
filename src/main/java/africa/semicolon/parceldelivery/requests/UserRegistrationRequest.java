@@ -14,8 +14,7 @@ public class UserRegistrationRequest {
     private String firstName;
     private String lastName;
 
-    private static String patternForEmail = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\\\.[A-Za-z0-9-]+)*(\\\\.[A-Za-z]{2,})$";
-    private static String patternForPassword = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\\\S+$).{8,20}$";
+    private static String patternForEmail = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
 
     public static boolean validateRequestEmail(String email) {
         return Pattern.compile(patternForEmail)
@@ -24,9 +23,7 @@ public class UserRegistrationRequest {
     }
 
     public static boolean validateRequestPassword(String password) {
-        return Pattern.compile(patternForPassword)
-                .matcher(password)
-                .matches();
+        return password.length() == 8;
     }
 
     public static boolean validateNameFields(String firstName, String lastName, String userName) {
