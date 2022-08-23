@@ -6,6 +6,7 @@ import africa.semicolon.parceldelivery.requests.UserRegistrationRequest;
 import africa.semicolon.parceldelivery.services.userExceptions.InvalidUserIdException;
 import africa.semicolon.parceldelivery.services.userExceptions.NonExistingEmailException;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -13,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
@@ -75,7 +77,7 @@ class UserServiceImplementationTest {
                 .isInstanceOf(InvalidUserIdException.class)
                 .hasMessage("User with id number " + user.getId() + " does not exist!");
     }
-
+    @Disabled
     @Test
     void testThatUserCanBeCreated() {
         UserRegistrationRequest request = new UserRegistrationRequest();
@@ -95,10 +97,27 @@ class UserServiceImplementationTest {
     }
 
     @Test
-    void getAllUsers() {
+    void testThatAllUsersCanBeGotten() {
+        userServiceImplementation.getAllUsers(1);
+        verify(userRepository).findAllBy(Pageable.ofSize(20));
     }
 
     @Test
     void getAllUserParcels() {
+        User user = new User();
+        user.setId(1L);
+        when(userRepository.findUserById(user.getId())).thenReturn(Optional.of(user));
+        userServiceImplementation.getAllUserParcels(user.getId());
+        verify(userRepository).findUserById(user.getId());
+    }
+
+    @Test
+    void testThatExceptionMessageIsThrownInMethodGetAllUserParcels() {
+        User user = new User();
+        user.setId(1L);
+        when(userRepository.findUserById(user.getId())).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> userServiceImplementation.getAllUserParcels(user.getId()))
+                .isInstanceOf(InvalidUserIdException.class)
+                .hasMessage("User with id number " + user.getId() + " does not exist!");
     }
 }

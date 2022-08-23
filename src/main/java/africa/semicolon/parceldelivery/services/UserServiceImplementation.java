@@ -53,7 +53,8 @@ public class UserServiceImplementation implements UserService {
             throw new ExistingEmailException(request.getEmail());
         } else if (UserRegistrationRequest.validateRequestEmail(request.getEmail())
                 && UserRegistrationRequest.validateRequestPassword(request.getPassword())
-                && UserRegistrationRequest.validateNameFields(request.getFirstName(), request.getLastName(), request.getUserName())) {
+                && UserRegistrationRequest.validateNameFields(request.getFirstName(), request.getLastName(), request.getUserName()))
+        {
             modelMapper.map(user, request);
             user.setRole(Role.TYPE_1);
             userRepository.save(user);
