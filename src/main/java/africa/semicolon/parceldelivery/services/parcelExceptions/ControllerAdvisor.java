@@ -26,4 +26,9 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleRoleException(RoleException exception, WebRequest request) {
         return handleExceptionInternal(exception, body, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
+
+    @ExceptionHandler(EmptyFieldException.class)
+    public ResponseEntity<Object> handleEmptyFieldException(EmptyFieldException exception, WebRequest request) {
+        return handleExceptionInternal(exception, body, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
 }

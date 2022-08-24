@@ -4,27 +4,34 @@ import africa.semicolon.parceldelivery.models.Location;
 import africa.semicolon.parceldelivery.models.Parcel;
 import africa.semicolon.parceldelivery.models.ParcelDeliveryStatus;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-//@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
 
 @DataJpaTest
 class ParcelRepositoryTest {
 
     @Autowired
     ParcelRepository parcelRepository;
+    Parcel parcel;
+    Location location;
 
     @Test
     void testThatInjectedComponentsAreNotNull() {
         assertThat(parcelRepository).isNotNull();
+    }
+
+    @BeforeEach
+    void setUp() {
+        parcel = new Parcel();
+        location = new Location();
     }
 
     @AfterEach
@@ -34,8 +41,6 @@ class ParcelRepositoryTest {
 
     @Test
     void testThatParcelCanBeFoundById() {
-        Parcel parcel = new Parcel();
-        Location location = new Location();
         location.setCity("Lagos");
         location.setCountry("Nigeria");
         location.setState("Lagos");
@@ -44,7 +49,6 @@ class ParcelRepositoryTest {
         parcel.setItemName("hand cuffs");
         parcel.setItemDescription("feisty");
         parcel.setDeliveryLocation(location);
-        parcel.setId(1L);
         parcel.setDeliveryDate(LocalDateTime.now());
         parcel.setCreationDate(LocalDateTime.now());
         parcel.setDeliveryStatus(ParcelDeliveryStatus.CODE_1);
@@ -53,13 +57,39 @@ class ParcelRepositoryTest {
         assertThat(existingParcel.isPresent()).isTrue();
     }
 
-    @Disabled
     @Test
-    void findAllBy() {
+    void testThatParcelsCanBeFoundByPageable() {
+        location.setCity("Lagos");
+        location.setCountry("Nigeria");
+        location.setState("Lagos");
+        location.setStreet("Emily Akinola");
+        location.setNumber(30);
+        parcel.setItemName("hand cuffs");
+        parcel.setItemDescription("feisty");
+        parcel.setDeliveryLocation(location);
+        parcel.setDeliveryDate(LocalDateTime.now());
+        parcel.setCreationDate(LocalDateTime.now());
+        parcel.setDeliveryStatus(ParcelDeliveryStatus.CODE_1);
+        parcelRepository.save(parcel);
+        var list = parcelRepository.findAllBy(Pageable.ofSize(20));
+        assertThat(list.size()).isEqualTo(1);
     }
 
-    @Disabled
     @Test
     void findParcelsByDeliveryStatus() {
+        location.setCity("Lagos");
+        location.setCountry("Nigeria");
+        location.setState("Lagos");
+        location.setStreet("Emily Akinola");
+        location.setNumber(30);
+        parcel.setItemName("hand cuffs");
+        parcel.setItemDescription("feisty");
+        parcel.setDeliveryLocation(location);
+        parcel.setDeliveryDate(LocalDateTime.now());
+        parcel.setCreationDate(LocalDateTime.now());
+        parcel.setDeliveryStatus(ParcelDeliveryStatus.CODE_1);
+        parcelRepository.save(parcel);
+        var list = parcelRepository.findParcelsByDeliveryStatus(ParcelDeliveryStatus.CODE_1, Pageable.ofSize(20));
+        assertThat(list.size()).isEqualTo(1);
     }
 }

@@ -24,38 +24,38 @@ public class ParcelController {
         this.parcelService = parcelService;
     }
 
-    @PatchMapping("/parcel-status/new-status/{parcel_id}")
-    public ResponseEntity<?> updateParcelDeliveryStatus(@PathVariable Long parcel_id, @RequestParam String status) {
-        parcelService.updateParcelStatus(parcel_id, status);
+    @PatchMapping("/{parcelId}")
+    public ResponseEntity<?> updateParcelDeliveryStatus(@PathVariable Long parcelId, @RequestParam String status) {
+        parcelService.updateParcelStatus(parcelId, status);
         var displayMessage = "Successful!";
         return new ResponseEntity<>(displayMessage, HttpStatus.OK);
     }
 
-    @GetMapping("/get-all-parcels/page-number")
+    @GetMapping("")
     public ResponseEntity<?> getAllParcels(@RequestParam int pageNumber) {
         var list = parcelService.getAllParcels(pageNumber);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @GetMapping("/get-all-delivered-parcels/page-number")
+    @GetMapping("")
     public ResponseEntity<?> getAllDeliveredParcels(@RequestParam int pageNumber) {
         var list = parcelService.getAllDeliveredParcels(pageNumber);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @GetMapping("/get-all-parcels-in-transit/page-number")
+    @GetMapping("")
     public ResponseEntity<?> getAllParcelsInTransit(@RequestParam int pageNumber) {
         var list = parcelService.getAllParcelsInTransit(pageNumber);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @GetMapping("/get-all-pending-parcels/page-number")
+    @GetMapping("")
     public ResponseEntity<?> getAllPendingParcels(@RequestParam int pageNumber) {
         var list = parcelService.getAllPendingParcels(pageNumber);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @GetMapping("/get-all-failed-to-deliver-parcels/page-number")
+    @GetMapping("")
     public ResponseEntity<?> getAllFailedParcels(@RequestParam int pageNumber) {
         var list = parcelService.getAllFailedParcels(pageNumber);
         return new ResponseEntity<>(list, HttpStatus.OK);
