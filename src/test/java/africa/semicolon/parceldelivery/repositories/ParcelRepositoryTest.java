@@ -34,11 +34,6 @@ class ParcelRepositoryTest {
         location = new Location();
     }
 
-    @AfterEach
-    void tearDown() {
-        parcelRepository.deleteAll();
-    }
-
     @Test
     void testThatParcelCanBeFoundById() {
         location.setCity("Lagos");
