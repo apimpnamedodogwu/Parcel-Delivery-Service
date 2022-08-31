@@ -16,6 +16,8 @@ public class UserRegistrationRequest {
 
     private static String patternForEmail = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
 
+
+
     public static boolean validateRequestEmail(String email) {
         return Pattern.compile(patternForEmail)
                 .matcher(email)
