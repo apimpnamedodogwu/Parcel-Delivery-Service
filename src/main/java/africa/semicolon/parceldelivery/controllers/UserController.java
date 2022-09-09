@@ -23,7 +23,7 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @GetMapping("{userId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<?> getAUserById(@PathVariable Long userId) {
         var user = userService.getUserById(userId);
         return new ResponseEntity<>(user, HttpStatus.OK);
@@ -42,7 +42,7 @@ public class UserController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @GetMapping("{userId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<?> getAUsersParcelList(@PathVariable Long userId) {
         var list = userService.getAllUserParcels(userId);
         return new ResponseEntity<>(list, HttpStatus.OK);

@@ -37,44 +37,44 @@ public class ParcelController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @GetMapping("")
+    @GetMapping("/delivered")
     public ResponseEntity<?> getAllDeliveredParcels(@RequestParam int pageNumber) {
         var list = parcelService.getAllDeliveredParcels(pageNumber);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @GetMapping("")
+    @GetMapping("/in-transit")
     public ResponseEntity<?> getAllParcelsInTransit(@RequestParam int pageNumber) {
         var list = parcelService.getAllParcelsInTransit(pageNumber);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @GetMapping("")
+    @GetMapping("/pending")
     public ResponseEntity<?> getAllPendingParcels(@RequestParam int pageNumber) {
         var list = parcelService.getAllPendingParcels(pageNumber);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @GetMapping("")
+    @GetMapping("/failed")
     public ResponseEntity<?> getAllFailedParcels(@RequestParam int pageNumber) {
         var list = parcelService.getAllFailedParcels(pageNumber);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @PostMapping("/create-parcel/request")
+    @PostMapping("")
     public ResponseEntity<?> createParcel(@RequestBody ParcelCreationRequest request) {
         parcelService.createParcel(request);
         var body = "Your parcel has been created successfully";
         return new ResponseEntity<>(body, HttpStatus.CREATED);
     }
 
-    @GetMapping("/get-parcel-details/{parcel_id}")
+    @GetMapping("/{parcel_id}")
     public ResponseEntity<?> getParcelDetails(@PathVariable Long parcel_id) {
         parcelService.getParcelDetails(parcel_id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PatchMapping("/update-parcel-location/{parcel_id}/new-location")
+    @PatchMapping("/{parcel_id}")
     public ResponseEntity<?> updateParcelLocation(@PathVariable Long parcel_id, @RequestBody Location location) {
         parcelService.updateParcelLocation(parcel_id, location);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
