@@ -80,7 +80,7 @@ public class ParcelServiceImplementation implements ParcelService {
         request.validateParcelCreation(request);
         var userCreatingAParcelExists = userRepository.findUserByEmail(request.getCreatorEmail());
         if (userCreatingAParcelExists.isPresent()) {
-            modelMapper.map(parcel, request);
+            modelMapper.map(request, parcel);
             parcel.setCreationDate(LocalDateTime.now());
             parcel.setDeliveryStatus(ParcelDeliveryStatus.CODE_1);
             parcel.setDeliveryDate(LocalDateTime.now());

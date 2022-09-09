@@ -55,7 +55,7 @@ public class UserServiceImplementation implements UserService {
                 && UserRegistrationRequest.validateRequestPassword(request.getPassword())
                 && UserRegistrationRequest.validateNameFields(request.getFirstName(), request.getLastName(), request.getUserName()))
         {
-            modelMapper.map(user, request);
+            modelMapper.map(request, user);
             user.setRole(Role.TYPE_1);
             userRepository.save(user);
         }
